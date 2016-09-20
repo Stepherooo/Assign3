@@ -1,10 +1,12 @@
+import java.io.IOException;
+
 // Stephanie Gan & John Lester
 // CST 338-30_FA16
 // Deck of Cards (M3)
 
 public class Assign3Main {
 
-   public static void main(String[] args) {
+   public static void main(String[] args) throws IOException {
       //testing some cards
 
       Card sample1 = new Card();
@@ -21,6 +23,9 @@ public class Assign3Main {
       //testing set()
       sample1.set('5', Card.Suit.HEARTS);
       System.out.println("New sample1: " + sample1.toString());
+      
+      //pause testing
+      int inChar = System.in.read();
    }
 }
 
