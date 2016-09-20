@@ -126,7 +126,14 @@ class Hand {
    // default constructor
    public Hand(int k) {
       for (int x = 0; x <= k; x++) {
-         // add card each iteration
+        if (x < MAX_CARDS) {
+           // add card each iteration
+           myCards[x] = new Card();
+           numCards++;
+        }
+        else {
+        	// return error
+        }
       }
    }
 
