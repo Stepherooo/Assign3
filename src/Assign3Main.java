@@ -1,3 +1,6 @@
+// Stephanie Gan & John Lester
+// CST 338-30_FA16
+// Deck of Cards (M3)
 
 public class Assign3Main {
 
@@ -22,12 +25,10 @@ public class Assign3Main {
 }
 
 class Card {
-   //create the enum for suit
+   //create values for value and suit
    public enum Suit {
       SPADES, DIAMONDS, HEARTS, CLUBS
    }
-
-   //create values for value and suit
    private char value;
    private Suit suit;
    private boolean errorFlag;
@@ -114,5 +115,49 @@ class Card {
          }
       }
       return checkCard;
+   }
+}
+
+class Hand {
+   public int MAX_CARDS = 52;
+   private Card[] myCards;
+   private int numCards;
+
+   // default constructor
+   public Hand(int k) {
+      for (int x = 0; x <= k; x++) {
+         // add card each iteration
+      }
+   }
+
+   // remove all cards from hand
+   public void resetHand() {
+      //Hand(0);
+   }
+
+   // add card to next avail position
+   public boolean set() {
+      //this();
+      return false;
+   }
+
+   // return and remove top card
+   public Card playCard() {
+      //this();
+      return new Card();
+   }
+
+   // stringizer to return entire string
+   public String toString() {
+      //this();
+      return "testing";
+   }
+
+   // accessor for numCards
+
+   // accessor for individual card
+   Card inspectCard(int k) {
+      //this();
+      return new Card();
    }
 }
