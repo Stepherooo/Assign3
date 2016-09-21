@@ -2,6 +2,8 @@
 // CST 338-30_FA16
 // Deck of Cards (M3)
 
+import java.util.Random;
+
 public class Assign3Main {
 
    public static void main(String[] args) {
@@ -9,7 +11,7 @@ public class Assign3Main {
 
       Card sample1 = new Card();
       Card sample2 = new Card('2', Card.Suit.SPADES);
-      Card sample3 = new Card('7', Card.Suit.CLUBS);
+      Card sample3 = new Card('x', Card.Suit.CLUBS);
       Card sample4 = new Card('Q', Card.Suit.DIAMONDS);
 
       //testing toString()
@@ -21,6 +23,12 @@ public class Assign3Main {
       //testing set()
       sample1.set('5', Card.Suit.HEARTS);
       System.out.println("New sample1: " + sample1.toString());
+      
+      //testing hand
+      Card card1 = new Card('4', Card.Suit.CLUBS);
+      Card card2 = new Card('K', Card.Suit.HEARTS);
+      Hand hand1 = new Hand();
+      hand1.takeCard(card1);
      
    }
 }
@@ -143,7 +151,7 @@ class Hand {
        
         //adds a card to the myCards array
         if (numCards < MAX_CARDS) {
-            myCards[numCards].set(card.getValue(), card.getSuit());
+            myCards[numCards] = new Card(card.getValue(), card.getSuit());
             //incrementing the counter of cards in the hand
             numCards++;
             testing = true;
@@ -298,16 +306,16 @@ class Deck {
 
          for (int s=0; s<4; s++) {
             if (s==0) {
-               suit = Card.Suit.CLUBS;
+               suit=Card.Suit.CLUBS;
             }
             else if (s==1) {
-               suit = Card.Suit.DIAMONDS;
+               suit=Card.Suit.DIAMONDS;
             }
             else if (s==2) {
-               suit = Card.Suit.HEARTS;
+               suit=Card.Suit.HEARTS;
             }
             else {
-               suit = Card.Suit.SPADES;
+               suit=Card.Suit.SPADES;
             }
 
             masterPack[13*s].set('A', suit);
