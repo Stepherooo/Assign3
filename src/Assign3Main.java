@@ -14,17 +14,29 @@ public class Assign3Main {
      
      do {
         //prompting the user for input with bounds checking
-        System.out.print("Enter the number of players: ");
+        System.out.print("Enter the number of players (1-10): ");
         input = userInput.nextInt();
      } while (input > 10 || input < 1);
      
-     //creating a new deck
-     Deck userDeck = new Deck(input);
-     
-     userDeck.init(input);
+     //initialize a deck
+     Deck userDeck = new Deck();
      
      //create an array of hands based on user input
      Hand[] currHands = new Hand[input];
+     
+     for (int i = 0; i < input; i++) {
+       currHands[i] = new Hand();
+     }
+     
+     //dealing cards
+     for (int i = 0; i < 52; i++) {
+       currHands[i%input].takeCard(userDeck.dealCard());
+     }
+     
+     //printing hand
+     for (int i = 0; i< input; i++) {
+       System.out.print(currHands[i].toString());
+     }
    }
 }
 
@@ -176,8 +188,8 @@ class Hand {
       String displayString = "";
       
       if (numCards > 0) {
-         for (Card card : myCards) {
-            displayString += card.toString() + ", ";
+         for (int i = 0; i < numCards; i++) {
+            displayString += myCards[i].toString() + ", ";
          }
       }
       
@@ -264,7 +276,7 @@ class Deck {
          return null;
       }
       else {
-         Card tempCard = cards[topCard-1];
+         Card tempCard = new Card(cards[topCard-1].getValue(), cards[topCard-1].getSuit());
          cards[topCard-1] = null;
          topCard--;
          return tempCard;
