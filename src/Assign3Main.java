@@ -210,67 +210,117 @@ class Hand {
 
 //An object of type Deck represents a deck of playing cards
 class Deck {
-   public int MAX_CARDS = 6*52;
-   private Card[] masterPack; // An array of cards.
-   private int cardsUsed; // Keeps track of the number of cards dealt
+   public static int MAX_CARDS = 6*52;
+   private static Card[] masterPack; // An array of cards.
+   private static boolean masterMade = false;
+   
+   private Card[] cards; // Holds all the decks of cards
+   private int topCard; // Keeps track of the top card
+   private int numPacks; // Keeps track of the packs
 
    // default constructor
    public Deck() {
-      masterPack = new Card[MAX_CARDS];
-      int cardCount = 0; // How many cards have been created so far.
-      for (int suit = 0; suit <= 3; suit++ ) {
-         for ( int value = 1; value <= 13; value++ ) {
-            int newValue;
-            if (value==1) {
-               newValue = 65; // convert 1 to A
+      this(1);
+   }
+
+   public Deck(int numPacks) {
+      allocateMasterPack();
+      this.cards=masterPack;
+      init(numPacks);
+   }
+
+   public void init(int numPacks) {
+      this.numPacks=numPacks;
+      getTopCard();
+      if((topCard)<=MAX_CARDS && numPacks>0) {
+         cards = new Card[topCard];
+         for(int init=0; init<cards.length; init++)
+            cards[init] = new Card();
+         for(int a=0; a<numPacks; a++) {
+            for(int b=52*a, c=0; b<52*a+52; b++, c++) {
+               cards[b] = masterPack[c];
             }
-            else if (value==10) {
-               newValue = 84; // convert 10 to T
-            }
-            else if (value==11) {
-               newValue = 74; // convert 11 to J
-            }
-            else if (value==12) {
-               newValue = 81; // convert 12 to Q
-            }
-            else if (value==13) {
-               newValue = 75; // convert 13 to K
-            }
-            else {
-               newValue = value;
-            }
-            if (suit==0) {
-               masterPack[cardCount] = new Card((char)newValue, Card.Suit.SPADES);
-            }
-            else if (suit == 1) {
-               masterPack[cardCount] = new Card((char)newValue, Card.Suit.DIAMONDS);
-            }
-            else if (suit == 2) {
-               masterPack[cardCount] = new Card((char)newValue, Card.Suit.HEARTS);
-            }
-            else {
-               masterPack[cardCount] = new Card((char)newValue, Card.Suit.CLUBS);
-            }
-            cardCount++;
          }
       }
-      cardsUsed = 0;
    }
 
    //shuffle the deck into a random order.
    public void shuffle() {
-      for ( int i = masterPack.length-1; i > 0; i-- ) {
-         int rand = (int)(Math.random()*(i+1));
-         Card temp = masterPack[i];
-         masterPack[i] = masterPack[rand];
-         masterPack[rand] = temp;
+      for (int i=masterPack.length-1; i>0; i--) {
+         int rand=(int)(Math.random()*(i+1));
+         Card temp=masterPack[i];
+         masterPack[i]=masterPack[rand];
+         masterPack[rand]=temp;
       }
-      cardsUsed = 0;
+      topCard=0;
    }
 
    // Removes the next card from the deck and returns it.
    public Card dealCard() {
-      cardsUsed++;
-      return masterPack[cardsUsed - 1];
+      if (topCard==0) {
+         return null;
+      }
+      else {
+         Card tempCard = cards[topCard-1];
+         cards[topCard-1] = null;
+         topCard--;
+         return tempCard;
+      }
+   }
+
+   // accessor for the int topCard
+   public int getTopCard() {
+      return 52*numPacks;
+   }
+
+   // Accessor for an individual card
+   public Card inspectCard(int location) {
+      if (topCard!=0 && location>0 && location<topCard) {
+         return cards[location];
+      }
+      else {
+         return new Card('Z', Card.Suit.CLUBS); // generates error from cards
+      }
+   }
+
+   // private method that will be called by the constructor
+   private static void allocateMasterPack() {
+      if (masterMade) {
+         return;
+      }
+      else {
+         masterPack=new Card[52];
+         Card.Suit suit;
+
+         for (int c=0; c<masterPack.length; c++) {
+            masterPack[c] = new Card();
+         }
+
+         for (int s=0; s<4; s++) {
+            if (s==0) {
+               suit = Card.Suit.CLUBS;
+            }
+            else if (s==1) {
+               suit = Card.Suit.DIAMONDS;
+            }
+            else if (s==2) {
+               suit = Card.Suit.HEARTS;
+            }
+            else {
+               suit = Card.Suit.SPADES;
+            }
+
+            masterPack[13*s].set('A', suit);
+            int cardCount; //create card count
+            char cardSuit; //create card suit
+            for (cardSuit='2', cardCount=1; cardSuit<='9'; cardSuit++, cardCount++)
+               masterPack[13*s+cardCount].set(cardSuit, suit);
+            masterPack[13*s+9].set('T', suit);
+            masterPack[13*s+10].set('J', suit);
+            masterPack[13*s+11].set('Q', suit);
+            masterPack[13*s+12].set('K', suit);
+         }
+         masterMade = true;
+      }
    }
 }
