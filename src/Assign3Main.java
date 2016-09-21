@@ -183,4 +183,94 @@ class Hand {
       
       return displayString;
     }
+    
+    //accessor for numCards
+    public int getNumCards() {
+      return numCards;
+    }
+    
+    //Card inspectCard(int k) - Accessor for an individual card.  Returns a card with errorFlag = true if k is bad
+    public Card inspectCard(int k) {
+      //make a boolean errorFlag
+      boolean errorFlag;
+      
+      //if the card in position k in hand exists, return the card
+      if (myCards[k] != null) {
+         errorFlag = false;
+         return myCards[k];
+      }
+      
+      //if the card in position k is null, set errorFlag to true
+      else {
+         errorFlag = true;
+         return myCards[k];
+      }
+    }
+}
+
+//An object of type Deck represents a deck of playing cards
+class Deck {
+   public int MAX_CARDS = 6*52;
+   private Card[] masterPack; // An array of cards.
+   private int cardsUsed; // Keeps track of the number of cards dealt
+
+   // default constructor
+   public Deck() {
+      masterPack = new Card[MAX_CARDS];
+      int cardCount = 0; // How many cards have been created so far.
+      for (int suit = 0; suit <= 3; suit++ ) {
+         for ( int value = 1; value <= 13; value++ ) {
+            int newValue;
+            if (value==1) {
+               newValue = 65; // convert 1 to A
+            }
+            else if (value==10) {
+               newValue = 84; // convert 10 to T
+            }
+            else if (value==11) {
+               newValue = 74; // convert 11 to J
+            }
+            else if (value==12) {
+               newValue = 81; // convert 12 to Q
+            }
+            else if (value==13) {
+               newValue = 75; // convert 13 to K
+            }
+            else {
+               newValue = value;
+            }
+            if (suit==0) {
+               masterPack[cardCount] = new Card((char)newValue, Card.Suit.SPADES);
+            }
+            else if (suit == 1) {
+               masterPack[cardCount] = new Card((char)newValue, Card.Suit.DIAMONDS);
+            }
+            else if (suit == 2) {
+               masterPack[cardCount] = new Card((char)newValue, Card.Suit.HEARTS);
+            }
+            else {
+               masterPack[cardCount] = new Card((char)newValue, Card.Suit.CLUBS);
+            }
+            cardCount++;
+         }
+      }
+      cardsUsed = 0;
+   }
+
+   //shuffle the deck into a random order.
+   public void shuffle() {
+      for ( int i = masterPack.length-1; i > 0; i-- ) {
+         int rand = (int)(Math.random()*(i+1));
+         Card temp = masterPack[i];
+         masterPack[i] = masterPack[rand];
+         masterPack[rand] = temp;
+      }
+      cardsUsed = 0;
+   }
+
+   // Removes the next card from the deck and returns it.
+   public Card dealCard() {
+      cardsUsed++;
+      return masterPack[cardsUsed - 1];
+   }
 }
