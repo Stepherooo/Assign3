@@ -247,16 +247,17 @@ class Deck {
       }
    }
 
-   //shuffle the deck into a random order.
-   public void shuffle() {
-      for (int i=masterPack.length-1; i>0; i--) {
-         int rand=(int)(Math.random()*(i+1));
-         Card temp=masterPack[i];
-         masterPack[i]=masterPack[rand];
-         masterPack[rand]=temp;
-      }
-      topCard=0;
-   }
+/*   //shuffle the deck into a random order.
+*   public void shuffle() {
+*      for (int i=masterPack.length-1; i>0; i--) {
+*         int rand=(int)(Math.random()*(i+1));
+*         Card temp=masterPack[i];
+*         masterPack[i]=masterPack[rand];
+*         masterPack[rand]=temp;
+*      }
+*      topCard=0;
+*   }
+*/
 
    // Removes the next card from the deck and returns it.
    public Card dealCard() {
@@ -273,8 +274,7 @@ class Deck {
 
    // accessor for the int topCard
    public int getTopCard() {
-      topCard = 52*numPacks;
-      return topCard;
+      return 52*numPacks;
    }
 
    // Accessor for an individual card
