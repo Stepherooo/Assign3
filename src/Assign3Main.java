@@ -1,12 +1,10 @@
-import java.io.IOException;
-
 // Stephanie Gan & John Lester
 // CST 338-30_FA16
 // Deck of Cards (M3)
 
 public class Assign3Main {
 
-   public static void main(String[] args) throws IOException {
+   public static void main(String[] args) {
       //testing some cards
 
       Card sample1 = new Card();
@@ -23,9 +21,7 @@ public class Assign3Main {
       //testing set()
       sample1.set('5', Card.Suit.HEARTS);
       System.out.println("New sample1: " + sample1.toString());
-      
-      //pause testing
-      int inChar = System.in.read();
+     
    }
 }
 
@@ -71,7 +67,7 @@ class Card {
    private boolean isValid(char value, Suit suit) {
       //making a character array to check validity
       char[] vals = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'};
-		
+       
       //initializing boolean
       boolean check = false;
 
@@ -82,7 +78,7 @@ class Card {
          }
       }
 
-      return check;		
+      return check;       
    }
 
    public String toString() {
@@ -124,52 +120,67 @@ class Card {
 }
 
 class Hand {
-   public int MAX_CARDS = 52;
-   private Card[] myCards;
-   private int numCards;
-
-   // default constructor
-   public Hand(int k) {
-      for (int x = 0; x <= k; x++) {
-        if (x < MAX_CARDS) {
-           // add card each iteration
-           myCards[x] = new Card();
-           numCards++;
+    //defining a max number of cards here to avoid a huge array by default
+    public int MAX_CARDS = 50;
+   
+    //making the array to hold the player's current hand
+    private Card[] myCards;
+    private int numCards;
+   
+    //default constructor
+    public Hand() {
+        this.myCards = new Card[MAX_CARDS];
+        numCards = 0;
+    }
+   
+    public void resetHand() {
+        //setting numCards back to zer0
+        numCards = 0;
+    }
+   
+    public boolean takeCard(Card card) {
+        boolean testing = false;
+       
+        //adds a card to the myCards array
+        if (numCards < MAX_CARDS) {
+            myCards[numCards].set(card.getValue(), card.getSuit());
+            //incrementing the counter of cards in the hand
+            numCards++;
+            testing = true;
         }
+       
         else {
-        	// return error
+            testing = false;
         }
+        return testing;
+    }
+   
+    public Card playCard() {
+      //returns and removes the card in the top occupied position of the array.
+      
+        Card cardPlayed = new Card(myCards[numCards - 1].getValue(), myCards[numCards - 1].getSuit());
+        //decrement counter
+        numCards--;
+       
+        //removing the card by setting it to null
+        myCards[numCards - 1] = null;
+        
+        return cardPlayed;
+    }
+    
+    //a stringizer that the client can use prior to displaying the entire hand
+    public String toString() {
+      String displayString = "";
+      
+      if (numCards > 0) {
+         for (Card card : myCards) {
+            displayString += card.toString() + ", ";
+         }
       }
-   }
-
-   // remove all cards from hand
-   public void resetHand() {
-      //Hand(0);
-   }
-
-   // add card to next avail position
-   public boolean set() {
-      //this();
-      return false;
-   }
-
-   // return and remove top card
-   public Card playCard() {
-      //this();
-      return new Card();
-   }
-
-   // stringizer to return entire string
-   public String toString() {
-      //this();
-      return "testing";
-   }
-
-   // accessor for numCards
-
-   // accessor for individual card
-   Card inspectCard(int k) {
-      //this();
-      return new Card();
-   }
+      
+      //remove the last two characters in displayString
+      displayString.substring(0, displayString.length() - 2);
+      
+      return displayString;
+    }
 }
