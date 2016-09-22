@@ -10,6 +10,91 @@ public class Assign3Main {
    private static Scanner userInput = new Scanner(System.in);
    
    public static void main(String[] args) {
+   //begin phase 1 testing
+   System.out.println("Phase 1 Testing");
+   
+   //instantiating 3 cards
+   Card phase1sample1 = new Card('4', Card.Suit.HEARTS);
+   Card phase1sample2 = new Card('Q', Card.Suit.SPADES);
+   Card phase1sample3 = new Card('J', Card.Suit.CLUBS);
+   
+   //printing the cards
+   System.out.println("Current Cards for phase 1");
+   System.out.println(phase1sample1.toString());
+   System.out.println(phase1sample2.toString());
+   System.out.println(phase1sample3.toString());
+   
+   //setting the cards' values manually
+   phase1sample1.set('B', Card.Suit.CLUBS);
+   phase1sample3.set('T', Card.Suit.HEARTS);
+   
+   //reprinting them
+   System.out.println("Re-set Cards for phase 1");
+   System.out.println(phase1sample1.toString());
+   System.out.println(phase1sample2.toString());
+   System.out.println(phase1sample3.toString());
+   
+   //begin phase 2 testing
+   System.out.println("\n\nPhase 2 Testing");
+   
+   //create cards to use for phase 2 testing
+   Card phase2sample1 = new Card('5', Card.Suit.CLUBS);
+   Card phase2sample2 = new Card('K', Card.Suit.CLUBS);
+   Card phase2sample3 = new Card('2', Card.Suit.HEARTS);
+   Card phase2sample4 = new Card('9', Card.Suit.DIAMONDS);
+   
+   //creating a hand
+   Hand phase2Hand = new Hand();
+   
+   //taking cards for phase 2 hand
+   phase2Hand.takeCard(phase2sample1);
+   phase2Hand.takeCard(phase2sample2);
+   phase2Hand.takeCard(phase2sample3);
+   phase2Hand.takeCard(phase2sample4);
+   
+   //displaying with toString()
+   System.out.println(phase2Hand.toString());
+   
+   //inspecting cards
+   System.out.println("Inspecting a couple of cards; one in hand and one non-valid:");
+   System.out.println(phase2Hand.inspectCard(0));
+   System.out.println(phase2Hand.inspectCard(6));
+   
+   //playing cards
+   for (int i = 0; i < 4; i++) {
+     System.out.println("Playing " + phase2Hand.playCard().toString());
+   }
+   
+   //display current hand
+   System.out.println("Current hand: " + phase2Hand.toString());
+   
+   //begin phase 3 testing
+   System.out.println("\n\nPhase 3 Testing");
+   
+   //declaring a deck with 2 packs of card
+   Deck testingDeck = new Deck(2);
+   
+   testingDeck.init(2);
+   
+   //reading off the cards
+   for (int i = 0; i < 52 *2; i++) {
+     System.out.print(testingDeck.inspectCard(i).toString() + " ");
+   }
+   
+   //re-initializing the deck
+   testingDeck.init(2);
+   
+   //shuffling the deck
+   testingDeck.shuffle();
+   
+   //reading off the cards
+   System.out.println("\n\nThe shuffled deck: ");
+   for (int i = 0; i < 52 *2; i++) {
+     System.out.print(testingDeck.inspectCard(i) + " ");
+   }
+   
+   //begin phase 4 testing
+   System.out.println("\n\nPhase 4 Testing");
      int input = 0;
      
      do {
@@ -33,10 +118,34 @@ public class Assign3Main {
        currHands[i%input].takeCard(userDeck.dealCard());
      }
      
-     //printing hand
+     //printing hands
      for (int i = 0; i< input; i++) {
        System.out.print(currHands[i].toString());
      }
+     
+     //shuffling
+     
+     System.out.print("\n\n Now doing shuffled Hands\n\n");
+     
+     for (int i = 0; i < input; i++) {
+       currHands[i].resetHand();
+     }
+     
+     Deck userDeckShuffled = new Deck(1);
+     userDeckShuffled.init(1);
+     userDeckShuffled.shuffle();
+     
+     //dealing cards again
+     for (int i = 0; i < 52; i++) {
+       currHands[i%input].takeCard(userDeckShuffled.dealCard());
+       
+     }
+     
+     //printing new hands
+     for (int i = 0; i< input; i++) {
+       System.out.print(currHands[i].toString());
+     }
+     
    }
 }
 
@@ -150,6 +259,7 @@ class Hand {
    
     public void resetHand() {
         //setting numCards back to zer0
+        myCards = new Card[MAX_CARDS];
         numCards = 0;
     }
    
@@ -174,11 +284,11 @@ class Hand {
       //returns and removes the card in the top occupied position of the array.
       
         Card cardPlayed = new Card(myCards[numCards - 1].getValue(), myCards[numCards - 1].getSuit());
-        //decrement counter
-        numCards--;
        
         //removing the card by setting it to null
         myCards[numCards - 1] = null;
+        //decrement counter
+        numCards--;
         
         return cardPlayed;
     }
@@ -188,13 +298,12 @@ class Hand {
       String displayString = "";
       
       if (numCards > 0) {
+          displayString += "Hand - ";
          for (int i = 0; i < numCards; i++) {
             displayString += myCards[i].toString() + ", ";
          }
+          displayString += "\n\n";
       }
-      
-      //remove the last two characters in displayString
-      displayString.substring(0, displayString.length() - 2);
       
       return displayString;
     }
@@ -246,28 +355,33 @@ class Deck {
 
    public void init(int numPacks) {
       this.numPacks=numPacks;
-      getTopCard();
+      topCard = numPacks * 52;
+      
       if((topCard)<=MAX_CARDS && numPacks>0) {
          cards = new Card[topCard];
-         for(int init=0; init<cards.length; init++)
-            cards[init] = new Card();
-         for(int a=0; a<numPacks; a++) {
-            for(int b=52*a, c=0; b<52*a+52; b++, c++) {
-               cards[b] = masterPack[c];
-            }
+         
+         for (int i=0; i < this.getTopCard(); i++){
+           cards[i] = masterPack[i%52];
          }
-      }
+         
+         //for(int init=0; init<cards.length; init++)
+         //   cards[init] = new Card();
+         //for(int a=0; a<numPacks; a++) {
+         //   for(int b=52*a, c=0; b<52*a+52; b++, c++) {
+         //      cards[b] = masterPack[c];
+     }
+
    }
 
    //shuffle the deck into a random order.
    public void shuffle() {
-      for (int i=masterPack.length-1; i>0; i--) {
-         int rand=(int)(Math.random()*(i+1));
-         Card temp=masterPack[i];
-         masterPack[i]=masterPack[rand];
-         masterPack[rand]=temp;
+      for (int i=0; i < numPacks * 52; i++) {
+         double randomDouble = Math.random() * numPacks * 52;
+         int rand = (int) randomDouble;
+         Card temp=cards[i];
+         cards[i]=cards[rand];
+         cards[rand]=temp;
       }
-      topCard=0;
    }
 
    // Removes the next card from the deck and returns it.
@@ -291,7 +405,7 @@ class Deck {
 
    // Accessor for an individual card
    public Card inspectCard(int location) {
-      if (topCard!=0 && location>0 && location<topCard) {
+      if (topCard!=0 && location>=0 && location<topCard) {
          return cards[location];
       }
       else {
